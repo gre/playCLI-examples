@@ -75,7 +75,7 @@ object Application extends Controller {
   // Re-stream a web radio by adding echo with sox
   def webRadioWithEcho = Action {
     val src = "http://radio.hbr1.com:19800/ambient.ogg"
-    Ok.stream(echoRadioHeaders >>> echoRadioStream)
+    Ok.stream(proxy(src)(addEchoToOgg &> _)/*echoRadioHeaders >>> echoRadioStream*/)
       .withHeaders(CONTENT_TYPE -> "audio/ogg")
   }
 

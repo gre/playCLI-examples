@@ -116,7 +116,10 @@ CLI.<span class="scalaMethodCall">pipe</span>(<span class="String">&quot;sox -t 
   Ok.<span class="scalaMethodCall">stream</span>(proxy(src)(addEchoToOgg &amp;&gt; <span class="Keyword">_</span>))
     .<span class="scalaMethodCall">withHeaders</span>(<span class="Special">CONTENT_TYPE</span> -&gt; <span class="String">&quot;audio/ogg&quot;</span>)
 }</code>
-<p>This works! But let's do better...</p>
+<p>
+  @if(examplesAvailable){<a href="@routes.Application.webRadioWithEcho">}This works!@if(examplesAvailable){</a>} 
+  But let's do better...
+</p>
 </div>
 </section>
 
@@ -193,7 +196,11 @@ open <a href="@routes.Application.downloadReEncodeAndStreamVideo().absoluteURL()
 
 <section>
   <h3>Immutability / Mutability</h3>
-  <p>TODO</p>
+  <ul class="incremental">
+    <li>CLI.enumerate is immutable</li>
+    <li>CLI.pipe is immutable</li>
+    <li>CLI.consume is <strong>mutable</strong></li>
+  </ul>
 </section>
 
 <section>
