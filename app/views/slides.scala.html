@@ -85,7 +85,7 @@
 
 @if(examplesAvailable) {
 <footer>
-open <a href="@routes.Application.find().absoluteURL()">@routes.Application.find().absoluteURL()</a>
+open <a href="@routes.Examples.find().absoluteURL()">@routes.Examples.find().absoluteURL()</a>
 </footer>
 }
 </section>
@@ -103,9 +103,22 @@ open <a href="@routes.Application.find().absoluteURL()">@routes.Application.find
 <section>
   <h3>ImageMagick is your friend</h3>
   <div class="incremental">
-    <code><span class="Keyword">val</span> <span class="scalaValName">convert64colors</span> = CLI.<span class="scalaMethodCall">pipe</span>(<span class="String">&quot;convert - -colors 64 png:-&quot;</span>)</code>
-    <code>Ok.<span class="scalaMethodCall">stream</span>(Enumerator.<span class="scalaMethodCall">fromFile</span>(<span class="String">&quot;cat.png&quot;</span>) &amp;&gt; convert64colors)</code>
+    <code><span class="Keyword">val</span> <span class="scalaValName">convert14colors</span> = CLI.<span class="scalaMethodCall">pipe</span>(<span class="String">&quot;convert - -colors 14 png:-&quot;</span>)</code>
+    <code>Ok.<span class="scalaMethodCall">stream</span>(
+  Enumerator.<span class="scalaMethodCall">fromFile</span>(<span class="String">&quot;nyancat.jpg&quot;</span>) &amp;&gt;
+  convert14colors)</code>
     <p>Image stream processing: Easy!</p>
+  </div>
+</section>
+
+<section>
+  <h3>ImageMagick color quantization example</h3>
+  <div>
+    <div style="text-align: center">
+      <h4>jpg, q=100%, 35 Ko → png, indexed, 1.2 Ko</h4>
+      <img src="@routes.Assets.at("resources/nyancat.jpg")" alt="" width="40%" />
+      <img src="@routes.Examples.nyancatColorsQuantization()" alt="" width="40%" />
+    </div>
   </div>
 </section>
 
@@ -120,7 +133,7 @@ CLI.<span class="scalaMethodCall">pipe</span>(<span class="String">&quot;sox -t 
     .<span class="scalaMethodCall">withHeaders</span>(<span class="Special">CONTENT_TYPE</span> -&gt; <span class="String">&quot;audio/ogg&quot;</span>)
 }</code>
 <p>
-  @if(examplesAvailable) {<a href="@routes.Application.webRadioWithEcho">}This works!@if(examplesAvailable) {</a>} 
+  @if(examplesAvailable) {<a href="@routes.Examples.webRadioWithEcho">}This works!@if(examplesAvailable) {</a>} 
   But let's do better...
 </p>
 </div>
@@ -139,7 +152,7 @@ CLI.<span class="scalaMethodCall">pipe</span>(<span class="String">&quot;sox -t 
   <footer>CPU 2%... No memory load... Bottleneck is network.</footer>
 @if(examplesAvailable) {
 <footer>
-open <a href="@routes.Application.downloadReEncodeAndStreamVideo().absoluteURL()">@routes.Application.downloadReEncodeAndStreamVideo().absoluteURL()</a>
+open <a href="@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()">@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()</a>
 </footer>
 }
   </div>
@@ -147,7 +160,12 @@ open <a href="@routes.Application.downloadReEncodeAndStreamVideo().absoluteURL()
 </section>
 
 <section>
-  <h1>. . .</h1>
+  <h3>Other examples</h3>
+  <ul>
+    <li><a href="@routes.Application.searchWords()">Search a word</a> (pipe a dictionary in grep)</li>
+    <li><a href="@routes.Examples.curlBlog()">Stream a curl</a></li>
+    <li>. . .</li>
+  </ul>
   <footer>
     All examples can be plugged in <code class="inline">Ok.<span class="scalaMethodCall">stream</span>(...)</code>
   </footer>

@@ -3,19 +3,20 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
-GET     /slides                     controllers.Application.slides
+GET     /                           controllers.Application.slides
+GET     /search/words               controllers.Application.searchWords
 
-GET     /grep                       controllers.Application.grepDictionary(search: String)
-GET     /colors                     controllers.Application.colorsQuantization(url: String)
+GET     /colors/nyancat             controllers.Examples.nyancatColorsQuantization
+GET     /grep                       controllers.Examples.grepDictionary(search: String)
+GET     /colors                     controllers.Examples.colorsQuantization(url: String)
 
-GET     /find                       controllers.Application.find
-GET     /curl                       controllers.Application.curl
-GET     /audioEchoEffectGenerate    controllers.Application.audioEchoEffectGenerate
+GET     /find                       controllers.Examples.find
+GET     /curl                       controllers.Examples.curlBlog
+GET     /audioEchoEffectGenerate    controllers.Examples.audioEchoEffectGenerate
 
-GET     /webradio.ogg               controllers.Application.webRadioWithEcho
-GET     /distant.avi                controllers.Application.downloadReEncodeAndStreamVideo
-GET     /local.avi                  controllers.Application.reEncodeAndStreamVideo
+GET     /webradio.ogg               controllers.Examples.webRadioWithEcho
+GET     /distant.avi                controllers.Examples.downloadReEncodeAndStreamVideo
+GET     /local.avi                  controllers.Examples.reEncodeAndStreamVideo
 
 
 # Map static resources from the /public folder to the /assets URL path
