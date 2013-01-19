@@ -34,6 +34,9 @@
     <li><code class="inline">CLI.pipe</code></li>
     <li><code class="inline">CLI.consume</code></li>
   </ul>
+  <footer>
+    <a href="http://greweb.fr/playcli/api">http://greweb.fr/playcli/api</a>
+  </footer>
 </section>
 
 <section>
@@ -117,7 +120,7 @@ CLI.<span class="scalaMethodCall">pipe</span>(<span class="String">&quot;sox -t 
     .<span class="scalaMethodCall">withHeaders</span>(<span class="Special">CONTENT_TYPE</span> -&gt; <span class="String">&quot;audio/ogg&quot;</span>)
 }</code>
 <p>
-  @if(examplesAvailable){<a href="@routes.Application.webRadioWithEcho">}This works!@if(examplesAvailable){</a>} 
+  @if(examplesAvailable) {<a href="@routes.Application.webRadioWithEcho">}This works!@if(examplesAvailable) {</a>} 
   But let's do better...
 </p>
 </div>
@@ -152,30 +155,28 @@ open <a href="@routes.Application.downloadReEncodeAndStreamVideo().absoluteURL()
 
 <section>
   <h1>I'm sure you have many other examples!</h1>
-  <footer>
-    <a href="http://greweb.fr/playcli/api">http://greweb.fr/playcli/api</a>
-  </footer>
 </section>
 
 <section>
   <h2>Important points</h2>
   <ul class="incremental">
-    <li>Scalability</li>
-    <li>Command termination</li>
     <li>Mutability / Immutability</li>
+    <li>Command termination</li>
+    <li>exitCode transmission</li>
+    <li>Scalability</li>
   </ul>
 </section>
 
 <section>
-  <div>
-    <h3>Only scalable with <code class="inline">Concurrent.broadcast</code></h3>
-    Play CLI use a thread pool. If the pool size is reach, the next Process creation attempt will fail. Using a broadcast will guarantee to not reach such issues.
-  </div>
+  <h3>Immutability / Mutability</h3>
+  <ul class="incremental">
+    <li>CLI.enumerate is immutable = reusable</li>
+    <li>CLI.pipe is immutable = reusable</li>
+    <li>CLI.consume is <strong>mutable</strong> = unique usage</li>
+  </ul>
   <div class="incremental">
-    <div>
-      But it is sometimes difficult to make a broadcasted stream working: Audio/Video can't easily been played in the middle (you need to implement a chunker for each format).<br />
-      <img src="@routes.Assets.at("slides/ogg.png")" alt="" />
-    </div>
+    <code><span class="Keyword">val</span> <span class="scalaValName">find</span> = CLI.<span class="scalaMethodCall">enumerate</span>(<span class="String">&quot;find .&quot;</span>)<br/><span class="Comment">// Re-usable - one Process each time</span></code>
+    <code><span class="Keyword">val</span> <span class="scalaValName">consume</span> = CLI.<span class="scalaMethodCall">consume</span>(<span class="String">&quot;sideEffect&quot;</span>)<br/><span class="Comment">// apply this iteratee once</span></code>
   </div>
 </section>
 
@@ -195,11 +196,36 @@ open <a href="@routes.Application.downloadReEncodeAndStreamVideo().absoluteURL()
 </section>
 
 <section>
-  <h3>Immutability / Mutability</h3>
+  <h3>How to transmit the exitCode ?</h3>
   <ul class="incremental">
-    <li>CLI.enumerate is immutable</li>
-    <li>CLI.pipe is immutable</li>
-    <li>CLI.consume is <strong>mutable</strong></li>
+    <li>CLI.consume: <code class="inline">Iteratee[Array[Byte], Int]</code></li>
+    <li>What about pipe and enumerate?</li>
+    <li>unconvenient solutions: 
+      <ul>
+        <li>
+      <code class="inline">Enumerator[Either[Array[Byte], Int]]</code>
+        </li>
+        <li>
+      <code class="inline">Enumeratee[Array[Byte], Either[Array[Byte], Int]]</code>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <footer>
+    Keep It Simple, Stupid
+  </footer>
+</section>
+
+<section>
+  <h3>Only scalable with <code class="inline">Concurrent.broadcast</code></h3>
+  <ul class="incremental">
+    <li>
+    Play CLI use a thread pool. If the pool size is reach, the next Process creation attempt will fail. Using a broadcast will guarantee to not reach such issues.
+    </li>
+    <li>
+      But it is sometimes difficult to make a broadcasted stream working: Audio/Video can't easily been played in the middle (you need to implement a chunker for each format).<br />
+      <img src="@routes.Assets.at("slides/ogg.png")" alt="" />
+    </li>
   </ul>
 </section>
 
@@ -252,7 +278,6 @@ open <a href="@routes.Application.downloadReEncodeAndStreamVideo().absoluteURL()
 
   a {
     color: inherit;
-    text-decoration: none;
   }
   a:hover {
     text-decoration: underline;
@@ -286,7 +311,11 @@ open <a href="@routes.Application.downloadReEncodeAndStreamVideo().absoluteURL()
   }
 
   ul {
-      margin: 40px 80px;
+      margin: 40px 0 40px 80px;
+  }
+
+  ul ul {
+    margin: 10px 0 10px 40px;
   }
 
   p {
