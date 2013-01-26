@@ -18,6 +18,40 @@
 </section>
 
 <section>
+  <h2>Unix Pipe</h2>
+  <code class="small">cat list.txt <strong>|</strong> wc <strong>|</strong> mail <span class="Special">-s</span> <span class="Statement">&quot;</span><span class="String">Count</span><span class="Statement">&quot;</span> gre@@greweb.fr</code>
+  <div style="text-align: center">
+    <img style="width: 360px" src="@routes.Assets.at("slides/Pipeline.svg")" alt="" />
+  </div>
+</section>
+
+<section>
+  <h2>Iteratees</h2>
+  <code class="small"><span class="Keyword">val</span> chunkedWaveStream =
+  rawStream <strong>&amp;&gt;</strong> chunker <strong>&amp;&gt;</strong> waveEncoder</code>
+  <div class="incremental">
+    <p><code class="inline"><strong>&amp;&gt;</strong></code> very similar to <code class="inline"><strong>|</strong></code></p>
+  </div>
+</section>
+
+<section>
+  <h2>Unix Pipe + Iteratees</h2>
+  <code class="small"><span class="Keyword">val</span> chunkedAudioStream =
+    rawStream <strong>&amp;&gt;</strong> CLI.<span class="scalaMethodCall">pipe</span>(<span class="String">&quot;sox -t raw - -t <strong>ogg</strong> -&quot;</span>)
+  </code>
+
+  <ul class="incremental">
+    <li>Access to powerful/complete/efficient UNIX tools in your stream processing chain.</li>
+    <li>Multiple multimedia purposes.</li>
+  </ul>
+
+</section>
+
+<section>
+  <h1>Under the hood...</h1>
+</section>
+
+<section>
   <h1>scala.sys.Process</h1>
   <p>Play CLI rely on Process to create commands.</p>
 </section>
@@ -205,7 +239,7 @@ open <a href="@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()">@
     <ul class="incremental">
       <li>The command has normally end</li>
       <li>stdin and stdout is terminated</li>
-      <li>Iteratee has sent Done = consumer stop to consume (e.g. The user closes the browser).</li>
+      <li>Iteratee has sent Done = consumer stopped to consume (e.g. The user closes the browser).</li>
     </ul>
     <footer>
       When done, wait exitCode or kill it if timeout reached.
@@ -271,7 +305,7 @@ open <a href="@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()">@
 .LineNr { color: #cccccc; background-color: #555555; padding-bottom: 1px; }
 .scalaMethodCall { font-style: italic; }
 .PreProc { color: #800080; }
-.Statement { color: #a52a2a; font-weight: bold; }
+.Keyword, .Statement { color: #a52a2a; font-weight: bold; }
 .Type { color: #2e8b57; font-weight: bold; }
 .Comment { color: #0000ff; }
 .Constant { color: #ff00ff; }
