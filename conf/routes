@@ -3,7 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.slides
+GET     /                           controllers.Application.slides(withExamples:Boolean = true)
+GET     /offline                    controllers.Application.slides(withExamples:Boolean = false)
 GET     /search/words               controllers.Application.searchWords
 
 GET     /colors/nyancat             controllers.Examples.nyancatColorsQuantization

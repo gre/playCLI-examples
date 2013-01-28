@@ -196,8 +196,8 @@ open <a href="@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()">@
 <section>
   <h3>Other examples</h3>
   <ul>
-    <li><a href="@routes.Application.searchWords()">Search a word</a> (pipe a dictionary in grep)</li>
-    <li><a href="@routes.Examples.curlBlog()">Stream a curl</a></li>
+    <li>@if(examplesAvailable) {<a href="@routes.Application.searchWords()">}Search a word@if(examplesAvailable) {</a>} (pipe a dictionary in grep)</li>
+    <li>@if(examplesAvailable) {<a href="@routes.Examples.curlBlog()">}Stream a curl@if(examplesAvailable) {</a>}</li>
     <li>. . .</li>
   </ul>
   <footer>
@@ -439,7 +439,7 @@ open <a href="@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()">@
     position: absolute;
     bottom: 0;
     width: 100%;
-    padding: 40px;
+    padding: 30px;
     text-align: right;
     background-color: #F3F4F8;
     color: #666;
