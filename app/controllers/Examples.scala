@@ -111,11 +111,11 @@ object Examples extends Controller {
 
   // consume a ogg sound, add an echo effect and store in a temporary file
   def audioEchoEffectGenerate = Action {
-    import concurrent.ExecutionContext.Implicits.global
     val file = File.createTempFile("sample_with_echo_", ".ogg") // handle myself the output
     val enum = Enumerator.fromFile(oggExampleFile)
     val addEchoToLocalOgg = CLI.consume(Process("sox -t ogg - -t ogg - echo 0.5 0.7 60 1") #> file)
     AsyncResult {
+      import concurrent.ExecutionContext.Implicits.global
       enum |>>> addEchoToLocalOgg map { _ =>
         Ok("'"+file.getAbsolutePath+"' file has been generated.\n")
       }
