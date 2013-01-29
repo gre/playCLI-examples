@@ -53,7 +53,7 @@
 
 <section>
   <h1>scala.sys.Process</h1>
-  <p>Play CLI rely on Process to create commands.</p>
+  <p>Play CLI relies on Process to create commands.</p>
 </section>
 
 <section>
@@ -198,6 +198,7 @@ open <a href="@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()">@
   <ul>
     <li>@if(examplesAvailable) {<a href="@routes.Application.searchWords()">}Search a word@if(examplesAvailable) {</a>} (pipe a dictionary in grep)</li>
     <li>@if(examplesAvailable) {<a href="@routes.Examples.curlBlog()">}Stream a curl@if(examplesAvailable) {</a>}</li>
+    <li>PDF processing?</li>
     <li>. . .</li>
   </ul>
   <footer>
@@ -210,7 +211,7 @@ open <a href="@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()">@
 </section>
 
 <section>
-  <h2>Important points</h2>
+  <h2>Important points / Limitations</h2>
   <ul class="incremental">
     <li>Mutability / Immutability</li>
     <li>Command termination</li>
@@ -235,14 +236,15 @@ open <a href="@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()">@
 <section>
   <h3>Termination of commands</h3>
   <div>
-    A <code class="inline">CLI.pipe("command")</code> is stopped if:
+    <code class="inline">CLI.pipe("command")</code> is stopped if:
     <ul class="incremental">
       <li>The command has normally end</li>
       <li>stdin and stdout is terminated</li>
-      <li>Iteratee has sent Done = consumer stopped to consume (e.g. The user closes the browser).</li>
+      <li>Iteratee has sent Done = consumer stopped to consume<!-- (e.g. The user closes the browser).--></li>
+      <li>When done, wait exitCode or kill it if timeout reached.</li>
     </ul>
     <footer>
-      When done, wait exitCode or kill it if timeout reached.
+      But still some edge cases on the current implementation...
     </footer>
   </div>
 </section>
@@ -275,7 +277,7 @@ open <a href="@routes.Examples.downloadReEncodeAndStreamVideo().absoluteURL()">@
     Play CLI use a thread pool. If the pool size is reach, the next Process creation attempt will fail. Using a broadcast will guarantee to not reach such issues.
     </li>
     <li>
-      But it is sometimes difficult to make a broadcasted stream working: Audio/Video can't easily been played in the middle (you need to implement a chunker for each format).<br />
+      But it is sometimes difficult to make a broadcasted stream working: Audio/Video can't easily been played in live (you need to implement a chunker for each format).<br />
       <img src="@routes.Assets.at("slides/ogg.png")" alt="" />
     </li>
   </ul>
