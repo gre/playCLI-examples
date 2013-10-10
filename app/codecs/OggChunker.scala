@@ -32,7 +32,7 @@ object OggChunker extends AudioChunker {
     bytes(3)
   }
 
-  val parseHeader: Iteratee[Byte, (Array[Byte], OggHeader)] = {
+  def parseHeader (implicit ec: concurrent.ExecutionContext): Iteratee[Byte, (Array[Byte], OggHeader)] = {
     (Enumeratee.take[Byte](27) &>> Iteratee.getChunks[Byte] map (_.toArray)) flatMap { firstBytes =>
       val numberPageSegments = firstBytes(26)
       (Enumeratee.take[Byte](numberPageSegments) &>> Iteratee.getChunks[Byte] map (_.toArray)) map { segments =>
@@ -52,7 +52,7 @@ object OggChunker extends AudioChunker {
     }
   }
 
-  def getPage (headerBytes: Array[Byte], header: OggHeader): Iteratee[Byte, Array[Byte]] = {
+  def getPage (headerBytes: Array[Byte], header: OggHeader)(implicit ec: concurrent.ExecutionContext): Iteratee[Byte, Array[Byte]] = {
       if (header.isValid) {
         Enumeratee.heading(Enumerator(headerBytes : _*)) ><>
         Enumeratee.take[Byte](header.pageSize) &>>
@@ -75,7 +75,7 @@ object OggChunker extends AudioChunker {
     0xac, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfa, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xb8, 0x01).map(_.toByte)
   */
 
-  override def apply (stream: Enumerator[Byte]): (Enumerator[Array[Byte]], Enumerator[Array[Byte]]) = {
+  override def apply (stream: Enumerator[Byte])(implicit ec: concurrent.ExecutionContext): (Enumerator[Array[Byte]], Enumerator[Array[Byte]]) = {
     val headers = Enumerator[Array[Byte]](/*oggHeader*/)
     val chunkedStream = stream &> Enumeratee.grouped(parseHeader flatMap { case (bytes, header) => getPage(bytes, header) })
     (headers, chunkedStream)

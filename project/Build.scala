@@ -8,7 +8,7 @@ object ApplicationBuild extends Build {
   val appVersion      = "1.0-SNAPSHOT"
 
   val appDependencies = Seq(
-    "fr.greweb" %% "playcli" % "0.1"
+    "fr.greweb" %% "playcli" % "0.11"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

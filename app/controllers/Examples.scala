@@ -59,6 +59,7 @@ object Examples extends Controller {
   import Commands._
   import Resources._
   import Utils._
+  import play.api.libs.concurrent.Execution.Implicits._
 
   // grep words
   def grepDictionary(search: String) = Action {
@@ -105,7 +106,7 @@ object Examples extends Controller {
   
   // Retrieve a webpage and display it
   def curlBlog = Action {
-    Ok.stream(curl("http://blog.greweb.fr/") >>> Enumerator.eof)
+    Ok.stream(curl("http://greweb.me/") >>> Enumerator.eof)
       .withHeaders(CONTENT_TYPE -> "text/html")
   }
 
@@ -125,7 +126,7 @@ object Examples extends Controller {
 }
 
 object Utils {
-  val bytesFlattener = Enumeratee.mapFlatten[Array[Byte]]( bytes => Enumerator.apply(bytes : _*) ) 
+  def bytesFlattener (implicit ec: concurrent.ExecutionContext) = Enumeratee.mapFlatten[Array[Byte]]( bytes => Enumerator.apply(bytes : _*) )
 
   // Consume a stream with url and push it in a socket with f
   // FIXME, how to tell WS to stop when socket is done?
@@ -133,14 +134,14 @@ object Utils {
     (socket: Socket.Out[Array[Byte]]) => WS.url(url).withTimeout(-1).get(headers => f(socket))
 
   // Proxify a stream forever
-  def proxyBroadcast (url: String) : Enumerator[Array[Byte]] = {
+  def proxyBroadcast (url: String)(implicit ec: concurrent.ExecutionContext) : Enumerator[Array[Byte]] = {
     val (enumerator, channel) = Concurrent.broadcast[Array[Byte]]
     WS.url(url).withTimeout(-1).get(headers => Iteratee.foreach[Array[Byte]] { bytes => channel.push(bytes) })
     enumerator
   }
   
   // Proxify a stream forever
-  def proxyUnicast (url: String) : Enumerator[Array[Byte]] = {
+  def proxyUnicast (url: String)(implicit ec: concurrent.ExecutionContext) : Enumerator[Array[Byte]] = {
     Concurrent.unicast[Array[Byte]] { channel =>
       WS.url(url).withTimeout(-1).get(headers => Iteratee.foreach[Array[Byte]] { bytes => channel.push(bytes) })
     }

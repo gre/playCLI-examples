@@ -22,3 +22,4 @@ GET     /local.avi                  controllers.Examples.reEncodeAndStreamVideo
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
